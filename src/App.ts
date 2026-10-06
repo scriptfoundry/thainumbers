@@ -1,0 +1,63 @@
+import { Learn } from './components/learn/learn';
+import { Listen } from './components/listen/listen';
+import { MainMenu, type ViewConfig } from './components/mainmenu/mainmenu';
+import type { Speaker } from './types';
+import * as TTS from './utils/tts';
+
+// import { wait } from './utils/utils';
+
+interface AppConfig {
+  rootSelector?: string;
+}
+type View = MainMenu | Listen | Learn;
+
+export class App {
+	private root: HTMLDivElement;
+	private currentView: View|undefined;
+	private speaker: Speaker | undefined;
+
+	constructor(config: AppConfig) {
+		const root = document.querySelector(config.rootSelector || '#app');
+		if (!root) throw new Error('Root element not found');
+		this.root = root as HTMLDivElement;
+
+		TTS.init().then(speaker => {
+
+			this.speaker = speaker;
+			// this.changeView({ section: 'listen', level: 1 });
+			this.changeView({ section: 'learn', level: 1 });
+			// this.changeView();
+		}).catch((e) => {
+			alert(e.message);
+		});
+
+	}
+
+
+
+	private changeView(config?: ViewConfig) {
+		if (this.currentView) {
+			this.currentView.unmount();
+			this.currentView = undefined;
+		}
+
+		if (!config || this.speaker === undefined) {
+			const mainMenu = new MainMenu(this.root, this.changeView);
+			mainMenu.mount();
+			this.currentView = mainMenu;
+			return;
+		}
+		const { section, level } = config;
+
+		if (section === 'learn') {
+			const practice = new Learn(this.root, level, this.speaker, this.changeView);
+			practice.mount();
+			this.currentView = practice;
+		} else {
+			const listen = new Listen(this.root, level, this.speaker, this.changeView);
+			listen.mount();
+			this.currentView = listen;
+		}
+	}
+
+}

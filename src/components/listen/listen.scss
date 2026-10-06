@@ -1,0 +1,14 @@
+.listen {
+
+	.numpad {
+		display: grid;
+		width: 100%;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2cqw;
+
+		button {
+			font-size: 8cqw;
+			font-weight: normal;
+		}
+	}
+}

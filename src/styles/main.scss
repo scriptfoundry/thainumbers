@@ -1,0 +1,111 @@
+@import "./reset.scss";
+// @import "./mixins.scss";
+
+@function space($multiplier) {
+  @return $multiplier * 0.125rem; /* If 3 is passed, returns 1.5rem */
+}
+
+:root {
+	--button-border-width: 1cq;
+	--standard-button-border-color: rgb(199, 198, 221);
+	--standard-button-background-color: rgb(229, 228, 247);
+	--standard-button-background-color-active: rgb(218, 217, 236);
+	--standard-button-color: rgb(102, 100, 135);
+
+	--foreground-color: rgb(187, 197, 210);
+	--foreground-background-color: rgb(252, 252, 255);
+	--foreground-border: 1px solid black;
+	--foreground-border-radius: 3cqw;
+}
+
+
+body {
+	font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+	font-size: 3.5cqw;
+	font-weight: 100;
+}
+h1 {
+	font-size: 6cqh;
+	padding-bottom: .25em;
+}
+h2 {
+	font-size: 1.5em;
+	padding-bottom: .25em;
+}
+
+#app {
+	display: flex;
+	max-height: 100vh;
+	aspect-ratio: 9/16;
+	overflow-x: hidden;
+	overflow-y: auto;
+	justify-content:center;
+	align-items:self-start;
+
+	border:1px solid red;
+
+	& > * {
+		width: 80%;
+		justify-self:center;
+		border: 1px solid green;
+	}
+}
+.selector {
+	display: flex;
+	flex-direction: column;
+	gap: space(3);
+
+}
+button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--standard-button-background-color);
+	color: var(--standard-button-color);
+	border-radius: 0.25em;
+	border: 1px solid var(--standard-button-border-color);
+	height: 3em;
+	font-size: 2.5cqh;
+
+	&:active {
+		background-color: var(--standard-button-background-color-active);
+		transform: translateX(.1em) translateY(.1em);
+	}
+}
+
+.back-button {
+	display: flex;
+	font-size: 2cqh;
+	line-height: 1em;
+	border-radius: 2em;
+	align-items: center;
+	gap: 0.5em;
+	padding-right: 1.25em;
+	background-color: rgb(241, 241, 250);
+	transition: transform .1s ease;
+	svg {
+		width:  1.5em;
+		height: 1.5em;
+	}
+	&:active {
+		background-color: rgb(42, 42, 237);
+		border-color: rgb(218, 218, 255);
+		color: rgb(247, 247, 255);
+		transform: translateX(-.2em);
+	}
+}
+.output {
+	font-size: 10cqh;
+	// text-align: center;
+	justify-content: center;
+	background-color: var(--foreground-background-color);
+	color: var(--foreground-color);
+	border: var(--foreground-border);
+	border-radius: var(--foreground-border-radius);
+	margin: 2cqw 0;
+	align-content:space-between;
+	font-variant-numeric: proportional-nums;
+	display: flex;
+	width: 100%;
+	aspect-ratio: 3;
+}

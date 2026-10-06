@@ -1,0 +1,32 @@
+@import '../../styles/mixins.scss';
+
+.learn {
+	.navigation {
+		display: flex;
+		flex-direction: column;
+		gap: 2cqw;
+		justify-content: center;
+
+		button {
+			font-size: 3cqh;
+			flex-direction: row;
+
+			svg {
+				width: 1.5em;
+				height: 1.5em;
+				margin: 0 .25em;
+			}
+		}
+
+		.next {
+			flex-direction: row-reverse;
+		}
+		.again {
+			background-color: blue;
+			color: white;
+			svg {
+				margin: 0 .5em;
+			}
+		}
+	}
+}
