@@ -1,7 +1,7 @@
 import { Learn } from './components/learn/learn';
 import { Listen } from './components/listen/listen';
-import { MainMenu, type ViewConfig } from './components/mainmenu/mainmenu';
-import type { Speaker } from './types';
+import { MainMenu } from './components/mainmenu/mainmenu';
+import type { Speaker, ViewConfig } from './types';
 import * as TTS from './utils/tts';
 
 // import { wait } from './utils/utils';
@@ -25,8 +25,8 @@ export class App {
 
 			this.speaker = speaker;
 			// this.changeView({ section: 'listen', level: 1 });
-			this.changeView({ section: 'learn', level: 1 });
-			// this.changeView();
+			// this.changeView({ section: 'learn',  level: 1 });
+			this.changeView();
 		}).catch((e) => {
 			alert(e.message);
 		});

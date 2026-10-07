@@ -2,12 +2,15 @@
 
 	.numpad {
 		display: grid;
-		width: 100%;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 2cqw;
 
 		button {
-			font-size: 8cqw;
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 1;
+			box-sizing:border-box;
+			font-size: 5cqh;
 			font-weight: normal;
 		}
 	}

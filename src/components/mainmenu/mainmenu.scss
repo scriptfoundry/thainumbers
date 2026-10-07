@@ -6,17 +6,22 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		gap: 2cqw;
-		// justify-content: center;
 	}
+
 	button {
-		font-size: 3cqh;
+		width: 18%;
+		height: inherit;
+		font-size: 4cqh;
 		aspect-ratio: 1;
 	}
 
 	ul {
-		margin: 2em 0;
 		padding: 0;
+		justify-self: center;
+		font-variant-numeric: proportional-nums;
+
+
+
 	}
 	li {
 		list-style:none;
