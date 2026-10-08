@@ -22,27 +22,26 @@ export class App {
 		this.root = root as HTMLDivElement;
 
 		TTS.init().then(speaker => {
-
 			this.speaker = speaker;
-			// this.changeView({ section: 'listen', level: 1 });
-			// this.changeView({ section: 'learn',  level: 1 });
-			this.changeView();
+			// this.changeView();
+			// this.changeView({ section: 'learn',  level: 3 });
+			this.changeView({ section: 'listen', level: 3 });
 		}).catch((e) => {
 			alert(e.message);
 		});
-
 	}
 
 
 
-	private changeView(config?: ViewConfig) {
+	private async changeView(config?: ViewConfig) {
 		if (this.currentView) {
 			this.currentView.unmount();
 			this.currentView = undefined;
 		}
 
-		if (!config || this.speaker === undefined) {
-			const mainMenu = new MainMenu(this.root, this.changeView);
+		const boundChangeView = this.changeView.bind(this);
+		if (!config) {
+			const mainMenu = new MainMenu(this.root, boundChangeView);
 			mainMenu.mount();
 			this.currentView = mainMenu;
 			return;
@@ -50,11 +49,11 @@ export class App {
 		const { section, level } = config;
 
 		if (section === 'learn') {
-			const practice = new Learn(this.root, level, this.speaker, this.changeView);
+			const practice = new Learn(this.root, boundChangeView, level, this.speaker);
 			practice.mount();
 			this.currentView = practice;
 		} else {
-			const listen = new Listen(this.root, level, this.speaker, this.changeView);
+			const listen = new Listen(this.root, boundChangeView, level, this.speaker);
 			listen.mount();
 			this.currentView = listen;
 		}

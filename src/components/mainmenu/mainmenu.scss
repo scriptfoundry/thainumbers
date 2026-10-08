@@ -1,5 +1,3 @@
-@import '../../styles/mixins.scss';
-
 .mainmenu {
 	.selector {
 		width: 100%;
@@ -11,7 +9,7 @@
 	button {
 		width: 18%;
 		height: inherit;
-		font-size: 4cqh;
+		font-size: 5cqw;
 		aspect-ratio: 1;
 	}
 
@@ -19,11 +17,10 @@
 		padding: 0;
 		justify-self: center;
 		font-variant-numeric: proportional-nums;
-
-
-
 	}
+
 	li {
-		list-style:none;
+		list-style: none;
+		font-size: 5cqw;
 	}
 }

@@ -13,9 +13,9 @@ export class Learn implements Component {
 
 	constructor(
 		container: HTMLDivElement,
+		backButtonHandler: ButtonHandler,
 		level: number,
 		speaker: Speaker,
-		backButtonHandler: ButtonHandler
 	) {
 		this.container = container;
 		this.level = level;
@@ -44,6 +44,7 @@ export class Learn implements Component {
 	}
 
 	private bindButtonEvents() {
-
+		const backButton = this.element.querySelector('.back-button') as HTMLButtonElement;
+		backButton.addEventListener('click', () => this.backButtonHandler());
 	}
 }

@@ -25,9 +25,13 @@ export class MainMenu implements Component {
 		for (const button of buttons) {
 			const value = button.dataset.value;
 			if (!value) continue;
+
 			const [section, level] = value.split('-');
 			button.addEventListener('click', () => {
-				this.menuHandler({ section: section as Section, level: parseInt(level, 10)});
+				this.menuHandler({
+					section: section as Section,
+					level: parseInt(level, 10),
+				});
 			});
 		}
 	}

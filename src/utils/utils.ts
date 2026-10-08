@@ -49,23 +49,31 @@ const shuffleArray = (arr: number[]) => {
 	return arr;
 };
 
-const getRandomizeNumberArray = (level: number, avoidZero: boolean) => {
+const getNumberArray = (level: number, avoidZero: boolean) => {
+	// Get all possible digits a number can have at a specific level (level 1 can have
+	// 0-10, level 2 can have 10-99, level 3 can have 100-999). Only level 1 is allowed
+	// a "leading zero".
+
 	const SOURCE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	const SOURCE_LENGTH = SOURCE.length;
 	const arr = SOURCE.slice(0, level > 1 ? SOURCE_LENGTH - 1 : SOURCE_LENGTH);
 
 	if (avoidZero) arr[0] = 1;
 
-	return shuffleArray(arr);
+	return arr;
 };
 export const replenishArray = (arr: number[], level: number) => {
+	const lastNumber = arr[arr.length - 1];
 	const numberArrays: number[][] = [];
 	const arrayLength = level === 1 ? 11 : 10;
 
+	// For each place in a number, create a shuffled list of all possible digits.
 	for (let i = 0; i < level; i++) {
-		numberArrays.push(getRandomizeNumberArray(level, level > 1 && i === 0));
+		numberArrays.push(shuffleArray(getNumberArray(level, level > 1 && i === 0)));
 	}
 
+	// Build the array by combining the shuffled digit arrays. For example:
+	// [[1,2,3], [4,5,6], [7,8,9]] becomes [147, 258, 369]
 	const nextArray = [];
 	for (let numberIndex = 0; numberIndex < arrayLength; numberIndex++) {
 		let val = 0;
@@ -74,5 +82,11 @@ export const replenishArray = (arr: number[], level: number) => {
 		}
 		nextArray.push(val);
 	}
-	return arr.concat(nextArray);
+
+	// Avoid creating consecutive numbers that repeat
+	if (nextArray[0] === lastNumber) nextArray.reverse();
+
+	// Mutate the original array by adding the new numbers
+	arr.splice(arr.length, 0, ...nextArray);
+
 };
