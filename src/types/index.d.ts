@@ -10,7 +10,7 @@ export interface ViewConfig {
 export type Section = 'learn' | 'listen';
 export type ButtonHandler = (config?: ViewConfig) => void;
 
-export type Lang = 'english' | 'thai';
+export type Lang = 'japanese' | 'thai';
 
 export interface Speaker {
 	say: (word: string, lang: Lang, rate?: number) => Promise<void>;

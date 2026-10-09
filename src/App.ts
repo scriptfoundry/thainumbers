@@ -34,12 +34,15 @@ export class App {
 
 
 	private async changeView(config?: ViewConfig) {
+		if (!this.speaker) return;
+
 		if (this.currentView) {
 			this.currentView.unmount();
 			this.currentView = undefined;
 		}
 
 		const boundChangeView = this.changeView.bind(this);
+
 		if (!config) {
 			const mainMenu = new MainMenu(this.root, boundChangeView);
 			mainMenu.mount();
@@ -59,4 +62,10 @@ export class App {
 		}
 	}
 
+	public destroy() {
+		if (this.currentView) {
+			this.currentView.unmount();
+			this.currentView = undefined;
+		}
+	}
 }

@@ -24,8 +24,14 @@
 		.again {
 			background-color: blue;
 			color: white;
+			> * {
+				pointer-events: none;
+			}
 			svg {
 				margin: 0 .5em;
+			}
+			&:disabled {
+				background-color: rgb(119, 119, 168);
 			}
 		}
 	}

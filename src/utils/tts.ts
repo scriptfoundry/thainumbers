@@ -24,31 +24,42 @@ const fetchVoices = (): Promise<SpeechSynthesisVoice[]> => new Promise((resolve,
 
 export const init = async (): Promise<Speaker> => {
 	const rxThai = /th[-_]TH/;
-	const rxEnglish = /en[-_]US/;
+	const rxJapanese = /ja[-_]JP/;
 
 	const voices = await fetchVoices();
-	const voiceEnglish = voices.find(({lang}) => rxEnglish.test(lang));
+	const voiceJapanese = voices.find(({lang}) => rxJapanese.test(lang));
 	const voiceThai = voices.find(({lang}) => rxThai.test(lang));
 
+	let speaking = false;
+
 	if (!voiceThai) throw new Error('No Thai voice found');
-	if (! voiceEnglish) throw new Error('No English voice found');
+	if (! voiceJapanese) throw new Error('No Japanese voice found');
 
 	const stop = () => {
 		speechSynthesis.cancel();
+		speaking = false;
 	};
 
 	const say = (word: string, lang: Lang, rate=1): Promise<void> => new Promise((resolve) => {
+		if (speaking) return;
+
 		const utterance = new SpeechSynthesisUtterance(word);
-		utterance.voice = lang === 'english' ? voiceEnglish : voiceThai;
+		utterance.voice = lang === 'japanese' ? voiceJapanese : voiceThai;
+		utterance.lang = utterance.voice.lang;
 		utterance.rate = rate;
 
 		utterance.addEventListener('error', (e) => {
 			// eslint-disable-next-line no-console
 			console.error(word, e);
+			speaking = false;
 			resolve();
 		});
-		utterance.addEventListener('end', () => resolve());
+		utterance.addEventListener('end', () => {
+			speaking = false;
+			resolve();
+		});
 
+		speaking = true;
 		speechSynthesis.speak(utterance);
 	});
 
