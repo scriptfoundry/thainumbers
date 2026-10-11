@@ -1,6 +1,6 @@
 import { replenishArray } from '../../utils/utils';
 import './learn.scss';
-import type { ButtonHandler, Component, Speaker } from '../../types';
+import type { ButtonHandler, Component, Data, Speaker } from '../../types';
 import { spellNumber } from '../../utils/number';
 import { wait, waitAnimationFrames } from '../../utils/utils';
 import LEARN_CONTENTS from './learn.html?raw';
@@ -25,6 +25,8 @@ export class Learn implements Component {
 		backButtonHandler: ButtonHandler,
 		level: number,
 		speaker: Speaker,
+		settings: Data,
+		changeSettings: (key: keyof Data, value: boolean) => void,
 	) {
 		this.container = container;
 		this.level = level;
@@ -41,7 +43,7 @@ export class Learn implements Component {
 
 		this.bindButtonEvents();
 
-		replenishArray(this.numbers, this.level);
+		replenishArray(this.numbers, this.level, this.level > 1);
 		this.currentNumberIndex = 0;
 
 		setTimeout(this.next.bind(this), 300);
@@ -83,7 +85,7 @@ export class Learn implements Component {
 		this.disableButtons();
 		await this.hideCurrentNumber();
 		await this.showCurrentNumber();
-		await wait(1000);
+		await wait(500 + this.level * 600);
 		await this.sayCurrentNumber();
 		this.enableButtons();
 	}

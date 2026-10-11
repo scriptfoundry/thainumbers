@@ -1,5 +1,5 @@
 import './listen.scss';
-import type { ButtonHandler, Component, Speaker } from '../../types/';
+import type { ButtonHandler, Component, Data, Speaker } from '../../types/';
 import { spellNumber } from '../../utils/number';
 import { advanceSentence, getSentence } from '../../utils/sentence';
 import { replenishArray, wait } from '../../utils/utils';
@@ -15,14 +15,17 @@ export class Listen implements Component {
 	private displayNumbers: number[];
 	private output: HTMLDivElement;
 	private speaker: Speaker;
-	private speakInSentences = false;
-	private speakSlowly = false;
+	private speakInSentences;
+	private speakSlowly;
+	private changeSettings: (data: keyof Data, value: boolean) => void;
 
 	constructor(
 		container: HTMLDivElement,
 		backButtonHandler: ButtonHandler,
 		level: number,
 		speaker: Speaker,
+		settings: Data,
+		changeSettings: (data: keyof Data, value: boolean) => void
 	) {
 		this.container = container;
 		this.backButtonHandler = backButtonHandler;
@@ -35,6 +38,10 @@ export class Listen implements Component {
 		this.element.innerHTML = LISTEN_CONTENTS;
 
 		this.output = this.element.querySelector('.output') as HTMLDivElement;
+
+		this.speakInSentences = settings.useSentence;
+		this.speakSlowly = settings.useSlow;
+		this.changeSettings = changeSettings;
 
 		replenishArray(this.spokenNumbers, this.level);
 
@@ -54,23 +61,30 @@ export class Listen implements Component {
 	}
 
 	private async markCorrect() {
+		// turn green
 		this.output.classList.toggle('correct', true);
 		await wait(1000);
+
+		// hide output
 		this.output.classList.toggle('invisible', true);
 		await wait(300);
+
+		// remove digits from display
 		this.displayNumbers.splice(0, this.displayNumbers.length);
 		this.update();
-		this.output.classList.toggle('invisible', false);
+
+		// unhide display
 		this.output.classList.toggle('correct', false);
+		this.output.classList.toggle('invisible', false);
+
 		advanceSentence();
-		await wait(300);
 	}
 
 	private async markIncorrect() {
 		this.output.classList.toggle('incorrect', true);
 		await wait(1000);
-		this.output.classList.toggle('correct', false);
 		this.displayNumbers.splice(0, this.displayNumbers.length);
+		this.output.classList.toggle('incorrect', false);
 		this.update();
 		this.output.classList.toggle('invisible', false);
 		await wait(300);
@@ -92,6 +106,7 @@ export class Listen implements Component {
 		} else {
 			await this.markIncorrect();
 		}
+		this.sayCurrentNumber();
 	}
 
 	private sayCurrentNumber() {
@@ -172,7 +187,9 @@ export class Listen implements Component {
 			const target = evt.target as HTMLInputElement;
 			this.speakInSentences = target.checked;
 			this.sayCurrentNumber();
+			this.changeSettings('useSentence', this.speakInSentences);
 		});
+		sentenceToggle.checked = this.speakInSentences;
 
 		const slowToggle = this.element.querySelector(
 			'#slow',
@@ -181,6 +198,8 @@ export class Listen implements Component {
 			const target = evt.target as HTMLInputElement;
 			this.speakSlowly = target.checked;
 			this.sayCurrentNumber();
+			this.changeSettings('useSlow', this.speakSlowly);
 		});
+		slowToggle.checked = this.speakSlowly;
 	}
 }

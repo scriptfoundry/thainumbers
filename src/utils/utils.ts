@@ -62,14 +62,16 @@ const getNumberArray = (level: number, avoidZero: boolean) => {
 
 	return arr;
 };
-export const replenishArray = (arr: number[], level: number) => {
+export const replenishArray = (arr: number[], level: number, shuffle = true) => {
 	const lastNumber = arr[arr.length - 1];
 	const numberArrays: number[][] = [];
 	const arrayLength = level === 1 ? 11 : 10;
 
 	// For each place in a number, create a shuffled list of all possible digits.
 	for (let i = 0; i < level; i++) {
-		numberArrays.push(shuffleArray(getNumberArray(level, level > 1 && i === 0)));
+		const numbers = getNumberArray(level, level > 1 && i === 0);
+		if (shuffle) shuffleArray(numbers);
+		numberArrays.push(numbers);
 	}
 
 	// Build the array by combining the shuffled digit arrays. For example:
