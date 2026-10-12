@@ -1,4 +1,4 @@
-@import '../../styles/mixins.scss';
+@use '../../styles/mixins';
 
 .learn {
 	.navigation {
@@ -16,22 +16,30 @@
 				height: 1.5em;
 				margin: 0 .25em;
 			}
+
+			&:disabled {
+				background-color: var(--standard-button-background-color-disabled);
+			}
 		}
 
 		.next {
 			flex-direction: row-reverse;
 		}
+
 		.again {
-			background-color: blue;
+			background-color: var(--action-button-background-color);
 			color: white;
-			> * {
+
+			>* {
 				pointer-events: none;
 			}
+
 			svg {
 				margin: 0 .5em;
 			}
+
 			&:disabled {
-				background-color: rgb(119, 119, 168);
+				background-color: var(--action-button-background-color-disabled);
 			}
 		}
 	}

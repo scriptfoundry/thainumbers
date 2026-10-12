@@ -1,5 +1,4 @@
-@import "./reset.scss";
-// @import "./mixins.scss";
+@use "./reset";
 
 @function space($multiplier) {
 	/* e.g. if 3 is passed, returns 1.5rem */
@@ -11,7 +10,11 @@
 	--standard-button-border-color: rgb(199, 198, 221);
 	--standard-button-background-color: rgb(229, 228, 247);
 	--standard-button-background-color-active: rgb(218, 217, 236);
+	--standard-button-background-color-disabled: rgb(236, 235, 244);
 	--standard-button-color: rgb(102, 100, 135);
+
+	--action-button-background-color: rgb(23, 23, 238);
+	--action-button-background-color-disabled: rgb(119, 119, 168);
 
 	--foreground-color: rgb(187, 197, 210);
 	--foreground-background-color: rgb(252, 252, 255);
@@ -134,4 +137,9 @@ button {
 	&.invisible {
 		color: rgba(187, 197, 210, 0);
 	}
+}
+legend {
+	justify-self: center;
+	margin-bottom: 1em;
+	font-size: 5cqw;
 }

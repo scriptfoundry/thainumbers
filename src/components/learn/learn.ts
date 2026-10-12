@@ -17,7 +17,8 @@ export class Learn implements Component {
 	private nextButton: HTMLButtonElement;
 	private previousButton: HTMLButtonElement;
 	private output: HTMLDivElement;
-	private busy = false;
+	private listenFirst: boolean;
+	private changeSettings: (key: keyof Data, value: boolean)=> void;
 
 
 	constructor(
@@ -29,9 +30,11 @@ export class Learn implements Component {
 		changeSettings: (key: keyof Data, value: boolean) => void,
 	) {
 		this.container = container;
+		this.backButtonHandler = backButtonHandler;
 		this.level = level;
 		this.speaker = speaker;
-		this.backButtonHandler = backButtonHandler;
+		this.listenFirst = settings.listenFirst;
+		this.changeSettings = changeSettings;
 
 		this.element = document.createElement('div');
 		this.element.innerHTML = LEARN_CONTENTS;
@@ -84,8 +87,9 @@ export class Learn implements Component {
 	private async next() {
 		this.disableButtons();
 		await this.hideCurrentNumber();
+		await wait(300);
 		await this.showCurrentNumber();
-		await wait(500 + this.level * 600);
+		if (this.listenFirst) await wait(500 + this.level * 400);
 		await this.sayCurrentNumber();
 		this.enableButtons();
 	}
@@ -106,25 +110,32 @@ export class Learn implements Component {
 		const backButton = this.element.querySelector('.back-button') as HTMLButtonElement;
 		backButton.addEventListener('click', () => this.backButtonHandler());
 
-		this.againButton.addEventListener('pointerdown', async (evt: PointerEvent) => {
+		this.againButton.addEventListener('click', async () => {
 			this.disableButtons();
 			await this.sayCurrentNumber();
 			this.enableButtons();
 		});
 
-		this.previousButton.addEventListener('pointerdown', () => {
+		this.previousButton.addEventListener('click', () => {
 			if (this.currentNumberIndex === 0) return;
 
 			this.currentNumberIndex -= 1;
 			this.next();
 		});
 
-		this.nextButton.addEventListener('pointerdown', () => {
+		this.nextButton.addEventListener('click', () => {
 			if (this.currentNumberIndex >= this.numbers.length - 1) {
 				replenishArray(this.numbers, this.level);
 			}
 			this.currentNumberIndex += 1;
 			this.next();
+		});
+
+		const listenFirstCheckbox = this.element.querySelector('#listenFirst') as HTMLInputElement;
+		listenFirstCheckbox.checked = this.listenFirst;
+		listenFirstCheckbox.addEventListener('change', () => {
+			this.listenFirst = listenFirstCheckbox.checked;
+			this.changeSettings('listenFirst', this.listenFirst);
 		});
 	}
 }
